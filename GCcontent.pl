@@ -2,6 +2,8 @@
 $file_count = 0;
 $file_iteration = 0;
 
+mkdir 'GCcontentOUTFILE';
+
 $dir = "YeastGenesA"; opendir(DIR,$dir) or die "can't open directory $dir:$!"; print"\n";
 #the extra function that I added to the code was that you can put in a certain DNA sequence and it will find how many times that sequence is in each file 
 print "Enter a DNA sequence: ";
@@ -24,11 +26,12 @@ while($filename = readdir DIR)
 {
     $ORFname = substr($filename, 0, 7);
     print "\nmy ORF name is "."$ORFname\n";
+    print OUTFILE "\nmy ORF name is "."$ORFname\n";
     $filelocation = "./YeastGenesA/"."$filename";
     if (length $ORFname == 7){
         open(INFILE, $filelocation) or die "Cannot open file";
     }else {next;}
-    
+    open (OUTFILE, ">"."./GCcontentOUTFILE/"."$filename") || die " could not open output file\n";
 
 while(<INFILE>){
     #print "in counting while loop\n";
@@ -63,8 +66,10 @@ while(<INFILE>){
     #print "out of part reading to eof\n";
 print "countGC "."$ORFname\t"."$CGCount\n";
 print "count of inputed DNA sequence " . "$inputed_seq_counter\n";
+print OUTFILE "countGC "."$ORFname\t"."$CGCount\n";
+print OUTFILE "count of inputed DNA sequence " . "$inputed_seq_counter\n";
 #print "countTTL "."$ORFname\t"."$totalCount\n";
-$freqGC = $CGCount/$totalCount;
+#$freqGC = $CGCount/$totalCount;
 #print "transLevel and freqGC "."$ORFname\t"."$transLevel\t"."$freqGC\n";
 #sleep(1);
 print "\n\n";
@@ -79,5 +84,4 @@ close INFILE;
 #this means that the amount you print to screen greatly affects the speed that the program runs 
 
 print "end program\n";
-close OUTFILE2;
 exit;
